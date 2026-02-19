@@ -12,17 +12,14 @@
 
 *{ box-sizing:border-box; }
 html,body{
-  margin:0;
-  padding:0;
+  margin:0; padding:0;
   background: var(--bg);
   color: var(--text);
   font-family: ui-monospace, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
 .bg{
-  position:fixed;
-  inset:0;
-  z-index:-1;
+  position:fixed; inset:0; z-index:-1;
   background: radial-gradient(1200px 700px at 30% 10%, rgba(20,150,80,0.12), transparent 55%),
               radial-gradient(900px 600px at 80% 40%, rgba(80,255,160,0.08), transparent 60%),
               linear-gradient(180deg, rgba(0,0,0,0.35), rgba(0,0,0,0.75));
@@ -62,14 +59,9 @@ html,body{
   padding:14px 14px 8px;
 }
 
-.brand{
-  display:flex;
-  gap:12px;
-  align-items:center;
-}
+.brand{ display:flex; gap:12px; align-items:center; }
 .orb{
-  width:42px; height:42px;
-  border-radius:999px;
+  width:42px; height:42px; border-radius:999px;
   background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.25), rgba(20,150,80,0.18) 35%, rgba(0,0,0,0.65));
   border: 1px solid rgba(140,255,190,0.28);
   box-shadow: 0 10px 30px var(--shadow);
@@ -80,10 +72,7 @@ html,body{
   color: rgba(190,255,220,0.95);
   text-shadow: 0 0 16px rgba(120,255,180,0.45);
 }
-.title{
-  font-size:16px;
-  letter-spacing: 0.12em;
-}
+.title{ font-size:16px; letter-spacing: 0.12em; }
 .sub{
   margin-top:4px;
   font-size:11px;
@@ -99,22 +88,13 @@ html,body{
   border: 1px solid var(--line2);
   box-shadow: 0 14px 34px var(--shadow);
 }
-.seedLabel{
-  font-size:11px;
-  color: var(--muted);
-  letter-spacing: 0.12em;
-}
+.seedLabel{ font-size:11px; color: var(--muted); letter-spacing: 0.12em; }
 .seedRow{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  margin-top:6px;
+  display:flex; align-items:center; justify-content:space-between;
+  gap:10px; margin-top:6px;
 }
 .seedValue{
-  font-size:14px;
-  letter-spacing: 0.08em;
-  color: var(--green);
+  font-size:14px; letter-spacing: 0.08em; color: var(--green);
 }
 .modeLabel{
   margin-top:6px;
@@ -159,12 +139,7 @@ html,body{
   color: var(--muted);
 }
 
-.chips{
-  margin-top:10px;
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-}
+.chips{ margin-top:10px; display:flex; flex-wrap:wrap; gap:8px; }
 .chip{
   border:1px solid rgba(120,255,180,0.18);
   background: rgba(0,0,0,0.22);
@@ -182,12 +157,7 @@ html,body{
   box-shadow: 0 0 0 2px rgba(140,255,190,0.08) inset;
 }
 
-.btnRow{
-  margin-top:10px;
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-}
+.btnRow{ margin-top:10px; display:flex; gap:10px; flex-wrap:wrap; }
 .btn{
   border-radius:16px;
   padding: 10px 12px;
@@ -206,11 +176,7 @@ html,body{
   background: rgba(20,150,80,0.24);
   border-color: rgba(140,255,190,0.32);
 }
-.btn.mini{
-  padding: 7px 9px;
-  font-size:11px;
-  letter-spacing:0.12em;
-}
+.btn.mini{ padding: 7px 9px; font-size:11px; letter-spacing:0.12em; }
 .btn.ghost{
   background: rgba(0,0,0,0.10);
   border-color: rgba(120,255,180,0.14);
@@ -232,7 +198,6 @@ html,body{
   padding:10px;
 }
 .setting.wide{ grid-column: 1 / -1; }
-
 .settingLabel{
   font-size:11px;
   letter-spacing:0.14em;
@@ -252,6 +217,8 @@ html,body{
   flex-wrap:wrap;
   gap:8px;
 }
+.moodSeg .segBtn{ padding: 9px 10px; }
+
 .segBtn{
   border-radius:999px;
   padding: 7px 10px;
@@ -275,24 +242,9 @@ html,body{
   align-items:center;
   flex-wrap:wrap;
 }
-.readout{
-  min-width:48px;
-  padding:8px 10px;
-  border-radius:12px;
-  background: rgba(0,0,0,0.22);
-  border:1px solid rgba(120,255,180,0.12);
-  color: var(--green);
-  letter-spacing:0.12em;
-  font-size:12px;
-  text-align:center;
-}
-.inputLabel{
-  font-size:10px;
-  color: var(--muted);
-  letter-spacing:0.10em;
-}
+.inputLabel{ font-size:10px; color: var(--muted); letter-spacing:0.10em; }
 .input{
-  width:86px;
+  width:92px;
   border-radius:12px;
   padding:8px 10px;
   border:1px solid rgba(120,255,180,0.12);
@@ -301,12 +253,7 @@ html,body{
   font-family: inherit;
 }
 
-.keys{
-  margin-top:8px;
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-}
+.keys{ margin-top:8px; display:flex; flex-wrap:wrap; gap:8px; }
 .keyBtn{
   border-radius:999px;
   padding: 7px 10px;
@@ -340,16 +287,8 @@ html,body{
   border-bottom:1px solid rgba(120,255,180,0.10);
   background: rgba(10,60,30,0.14);
 }
-.vizTitle{
-  font-size:11px;
-  letter-spacing:0.14em;
-  color: rgba(210,255,230,0.88);
-}
-.vizHint{
-  font-size:10px;
-  letter-spacing:0.10em;
-  color: var(--muted);
-}
+.vizTitle{ font-size:11px; letter-spacing:0.14em; color: rgba(210,255,230,0.88); }
+.vizHint{ font-size:10px; letter-spacing:0.10em; color: var(--muted); }
 .vizCanvas{
   width:100%;
   height:auto;
@@ -359,9 +298,7 @@ html,body{
 }
 
 /* FOOTER */
-.footer{
-  padding: 12px 14px 0;
-}
+.footer{ padding: 12px 14px 0; }
 .footerBar{
   display:flex;
   align-items:center;
@@ -374,16 +311,10 @@ html,body{
   border: 1px solid rgba(120,255,180,0.16);
   box-shadow: 0 18px 38px var(--shadow);
 }
-.transport{
-  display:flex;
-  gap:10px;
-  align-items:center;
-}
-.nowInfo{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-}
+.transport{ display:flex; gap:10px; align-items:center; }
+.feedback{ display:flex; gap:8px; align-items:center; }
+.nowInfo{ display:flex; gap:8px; flex-wrap:wrap; }
+
 .tag{
   font-size:10px;
   letter-spacing:0.12em;
@@ -394,9 +325,7 @@ html,body{
   border: 1px solid rgba(120,255,180,0.10);
 }
 
-.trackPanel{
-  margin-top:12px;
-}
+.trackPanel{ margin-top:12px; }
 .trackList{
   margin-top:10px;
   display:flex;
@@ -424,6 +353,4 @@ html,body{
   text-align:right;
 }
 
-.safePad{
-  height: max(18px, env(safe-area-inset-bottom));
-}
+.safePad{ height: max(18px, env(safe-area-inset-bottom)); }
