@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#061a0b" />
+  <title>DIGI MIDI-GEN</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="bg">
+    <div class="grid"></div>
+    <div class="vignette"></div>
+    <div class="scan"></div>
+  </div>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="orb" aria-hidden="true"><span class="orbNote">♪</span></div>
+      <div class="brandText">
+        <div class="title">DIGI MIDI-GEN</div>
+        <div class="sub">8-BAR • TYPE-1 MIDI • WEB AUDIO PREVIEW</div>
+      </div>
+    </div>
+
+    <div class="seedBox">
+      <div class="seedLabel">SEED</div>
+      <div class="seedRow">
+        <div id="seedValue" class="seedValue">—</div>
+        <button id="copySeed" class="btn mini">COPY</button>
+      </div>
+      <div id="modeLabel" class="modeLabel">MODE: —</div>
+    </div>
+  </header>
+
+  <!-- HUD overlays (hidden via HIDE button) -->
+  <main id="hud" class="hud">
+    <section class="panel wide">
+      <div class="panelHeader">
+        <div class="panelTitle">ARTISTS</div>
+        <div class="panelHint">FIRST SELECTED = MAIN</div>
+      </div>
+      <div id="artistToggles" class="chips"></div>
+    </section>
+
+    <section class="panel">
+      <div class="panelHeader">
+        <div class="panelTitle">ACTIONS</div>
+        <div class="panelHint">GENERATE = NEW SEED</div>
+      </div>
+      <div class="btnRow">
+        <button id="generateBtn" class="btn big">GENERATE</button>
+      </div>
+      <div class="btnRow">
+        <button id="playBtn" class="btn">PLAY</button>
+        <button id="stopBtn" class="btn ghost">STOP</button>
+      </div>
+      <div class="btnRow">
+        <button id="settingsBtn" class="btn">SETTINGS</button>
+        <button id="hideBtn" class="btn ghost">HIDE</button>
+      </div>
+    </section>
+
+    <section id="settingsPanel" class="panel wide hidden">
+      <div class="panelHeader">
+        <div class="panelTitle">SETTINGS</div>
+        <div class="panelHint">AUTO-FIRST</div>
+      </div>
+
+      <div class="settingsGrid">
+        <div class="setting wide">
+          <div class="settingLabel">VIEW</div>
+          <div class="seg">
+            <button class="segBtn" data-setting="viewMode" data-value="track">TRACK</button>
+            <button class="segBtn" data-setting="viewMode" data-value="ring">RING</button>
+          </div>
+          <div class="settingHelp">TRACK = lanes • RING = spectrum. TRACK is default.</div>
+        </div>
+
+        <div class="setting">
+          <div class="settingLabel">SONG SKETCH</div>
+          <div class="seg">
+            <button class="segBtn" data-setting="songSketch" data-value="off">OFF</button>
+            <button class="segBtn" data-setting="songSketch" data-value="on">ON</button>
+          </div>
+          <div class="settingHelp">ON = INTRO/DROP/BREAK/RETURN</div>
+        </div>
+
+        <div class="setting">
+          <div class="settingLabel">BPM MODE</div>
+          <div class="seg">
+            <button class="segBtn" data-setting="bpmMode" data-value="artist">RANDOM (ARTIST)</button>
+            <button class="segBtn" data-setting="bpmMode" data-value="fixed">FIXED</button>
+            <button class="segBtn" data-setting="bpmMode" data-value="manual">MANUAL</button>
+            <button class="segBtn" data-setting="bpmMode" data-value="range">RANDOM (RANGE)</button>
+          </div>
+          <div class="settingHelp">DEFAULT: RANDOM based on MAIN artist</div>
+        </div>
+
+        <div class="setting">
+          <div class="settingLabel">BPM</div>
+          <div class="bpmRow">
+            <button id="bpmMinus" class="btn mini">-</button>
+            <div id="bpmDisplay" class="readout">—</div>
+            <button id="bpmPlus" class="btn mini">+</button>
+          </div>
+          <div class="bpmRow">
+            <label class="inputLabel">Fixed</label>
+            <input id="bpmFixed" class="input" type="number" min="60" max="220" value="170" />
+            <label class="inputLabel">Range</label>
+            <input id="bpmMin" class="input" type="number" min="60" max="220" value="155" />
+            <input id="bpmMax" class="input" type="number" min="60" max="220" value="180" />
+          </div>
+        </div>
+
+        <div class="setting">
+          <div class="settingLabel">KEY MODE</div>
+          <div class="seg">
+            <button class="segBtn" data-setting="keyMode" data-value="auto">AUTO</button>
+            <button class="segBtn" data-setting="keyMode" data-value="pick">PICK</button>
+          </div>
+          <div class="settingHelp">AUTO chooses key/scale each generate</div>
+        </div>
+
+        <div class="setting">
+          <div class="settingLabel">SCALE MODE</div>
+          <div class="seg">
+            <button class="segBtn" data-setting="scaleMode" data-value="auto">AUTO</button>
+            <button class="segBtn" data-setting="scaleMode" data-value="natural">NATURAL</button>
+            <button class="segBtn" data-setting="scaleMode" data-value="harmonic">HARMONIC</button>
+            <button class="segBtn" data-setting="scaleMode" data-value="phrygian">PHRYGIAN</button>
+          </div>
+        </div>
+
+        <div class="setting wide">
+          <div class="settingLabel">AUDIO</div>
+
+          <div class="settingLabel" style="margin-top:10px">MASTER CLIP</div>
+          <div class="seg">
+            <button class="segBtn" data-setting="clipMode" data-value="auto">AUTO</button>
+            <button class="segBtn" data-setting="clipMode" data-value="on">ON</button>
+            <button class="segBtn" data-setting="clipMode" data-value="off">OFF</button>
+          </div>
+
+          <div class="settingLabel" style="margin-top:10px">SIDECHAIN</div>
+          <div class="seg">
+            <button class="segBtn" data-setting="sidechainMode" data-value="auto">AUTO</button>
+            <button class="segBtn" data-setting="sidechainMode" data-value="on">ON</button>
+            <button class="segBtn" data-setting="sidechainMode" data-value="off">OFF</button>
+          </div>
+
+          <div class="settingLabel" style="margin-top:10px">LOFI / CRUSH</div>
+          <div class="seg">
+            <button class="segBtn" data-setting="crushMode" data-value="auto">AUTO</button>
+            <button class="segBtn" data-setting="crushMode" data-value="on">ON</button>
+            <button class="segBtn" data-setting="crushMode" data-value="off">OFF</button>
+          </div>
+          <div class="settingHelp">AUTO enables CRUSH when ESDEEKID is selected (and blends in MIX).</div>
+        </div>
+
+        <div class="setting wide">
+          <div class="settingLabel">PICK KEY</div>
+          <div id="keyButtons" class="keys"></div>
+          <div class="settingHelp">Used only when KEY MODE = PICK</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- VISUAL AREA (stays visible even in HIDE) -->
+  <section class="vizWrap">
+    <div class="vizHeader">
+      <div class="vizTitle">VISUAL</div>
+      <div class="vizHint">TAP CANVAS (HIDDEN MODE) TO SHOW HUD</div>
+    </div>
+    <canvas id="viz" class="vizCanvas" width="1200" height="520"></canvas>
+  </section>
+
+  <!-- Always-visible transport + download -->
+  <footer class="footer">
+    <div class="footerBar">
+      <button id="downloadBtn" class="btn big">DOWNLOAD</button>
+
+      <div class="transport">
+        <button id="playBtnFooter" class="btn">PLAY</button>
+        <button id="stopBtnFooter" class="btn ghost">STOP</button>
+      </div>
+
+      <div class="nowInfo">
+        <div id="bpmNow" class="tag">BPM: —</div>
+        <div id="keyNow" class="tag">KEY: —</div>
+        <div id="artistsNow" class="tag">ARTISTS: —</div>
+      </div>
+    </div>
+
+    <section class="panel wide trackPanel">
+      <div class="panelHeader">
+        <div class="panelTitle">TRACKLIST</div>
+        <div class="panelHint">ALWAYS VISIBLE</div>
+      </div>
+      <div id="trackList" class="trackList"></div>
+    </section>
+
+    <div class="safePad"></div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
