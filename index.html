@@ -19,7 +19,7 @@
       <div class="orb" aria-hidden="true"><span class="orbNote">♪</span></div>
       <div class="brandText">
         <div class="title">DIGI MIDI-GEN</div>
-        <div class="sub">AI PLANNER • 8 BARS • WEB AUDIO PREVIEW • MIDI EXPORT</div>
+        <div class="sub">AI PLANNER • STRUCTURE + GROOVE DISCIPLINE • MIDI EXPORT</div>
       </div>
     </div>
 
@@ -46,16 +46,16 @@
     <section class="panel wide">
       <div class="panelHeader">
         <div class="panelTitle">MOOD / VIBE</div>
-        <div class="panelHint">PICK 1 • AI MODIFIES STRUCTURE</div>
+        <div class="panelHint">PICK 1 • AI MODIFIES INTENSITY</div>
       </div>
       <div id="moodRow" class="seg moodSeg"></div>
-      <div class="settingHelp">MOOD shifts energy curve + stop policy + density. Structure stays artist-coded.</div>
+      <div class="settingHelp">Mood changes density, stop policy, and variation — artist groove stays locked.</div>
     </section>
 
     <section class="panel">
       <div class="panelHeader">
         <div class="panelTitle">ACTIONS</div>
-        <div class="panelHint">AI PLANS • RULES EXECUTE</div>
+        <div class="panelHint">AI PLANS • GROOVE EXECUTES</div>
       </div>
       <div class="btnRow">
         <button id="generateBtn" class="btn big">GENERATE</button>
@@ -68,10 +68,31 @@
     <section id="settingsPanel" class="panel wide hidden">
       <div class="panelHeader">
         <div class="panelTitle">SETTINGS</div>
-        <div class="panelHint">SAFE DEFAULTS</div>
+        <div class="panelHint">STRUCTURE + LENGTH</div>
       </div>
 
       <div class="settingsGrid">
+        <div class="setting wide">
+          <div class="settingLabel">LENGTH</div>
+          <div class="seg">
+            <button class="segBtn" data-setting="bars" data-value="4">4 BARS</button>
+            <button class="segBtn" data-setting="bars" data-value="8">8 BARS</button>
+            <button class="segBtn" data-setting="bars" data-value="16">16 BARS</button>
+          </div>
+          <div class="settingHelp">Longer length enables more “song sketch” structure.</div>
+        </div>
+
+        <div class="setting wide">
+          <div class="settingLabel">SKETCH</div>
+          <div class="seg">
+            <button class="segBtn" data-setting="sketch" data-value="loop">LOOP</button>
+            <button class="segBtn" data-setting="sketch" data-value="teaseDrop">TEASE→DROP</button>
+            <button class="segBtn" data-setting="sketch" data-value="aaba">AABA</button>
+            <button class="segBtn" data-setting="sketch" data-value="buildDrop">BUILD→DROP</button>
+          </div>
+          <div class="settingHelp">Sketch controls section map (intro/drop/break/return). AI still applies artist discipline.</div>
+        </div>
+
         <div class="setting wide">
           <div class="settingLabel">VIEW</div>
           <div class="seg">
@@ -87,10 +108,9 @@
             <button class="segBtn" data-setting="keyMode" data-value="auto">AUTO</button>
             <button class="segBtn" data-setting="keyMode" data-value="pick">PICK</button>
           </div>
-          <div class="settingHelp">AUTO = AI chooses key/scale per artist.</div>
         </div>
 
-        <div class="setting">
+        <div class="setting wide">
           <div class="settingLabel">SCALE BIAS</div>
           <div class="seg">
             <button class="segBtn" data-setting="scaleMode" data-value="auto">AUTO</button>
@@ -114,21 +134,12 @@
             <label class="inputLabel">Manual</label>
             <input id="bpmManual" class="input" type="number" min="60" max="220" value="170" />
           </div>
-
-          <div class="settingHelp">Default: AI (artist-coded). Manual overrides AI tempo choice.</div>
         </div>
 
         <div class="setting wide">
           <div class="settingLabel">PICK KEY</div>
           <div id="keyButtons" class="keys"></div>
           <div class="settingHelp">Used only when KEY MODE = PICK</div>
-        </div>
-
-        <div class="setting wide">
-          <div class="settingLabel">PREVIEW FX (AUTO)</div>
-          <div class="settingHelp">
-            v2 uses artist-coded routing automatically (clip/duck/crush/reverb/mono width). No manual toggles needed right now.
-          </div>
         </div>
       </div>
     </section>
@@ -162,6 +173,7 @@
       <div class="nowInfo">
         <div id="bpmNow" class="tag">BPM: —</div>
         <div id="keyNow" class="tag">KEY: —</div>
+        <div id="lenNow" class="tag">LEN: —</div>
         <div id="artistsNow" class="tag">ARTISTS: —</div>
         <div id="moodNow" class="tag">MOOD: —</div>
       </div>
