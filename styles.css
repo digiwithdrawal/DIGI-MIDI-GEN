@@ -1,356 +1,196 @@
-:root{
-  --bg:#050a07;
-  --glass: rgba(10, 60, 30, 0.12);
-  --glass2: rgba(10, 60, 30, 0.18);
-  --line: rgba(120, 255, 180, 0.22);
-  --line2: rgba(120, 255, 180, 0.12);
-  --text: rgba(210, 255, 230, 0.92);
-  --muted: rgba(210, 255, 230, 0.68);
-  --green: rgba(140, 255, 190, 0.95);
-  --shadow: rgba(0,0,0,0.45);
-}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#061a0b" />
+  <title>DIGI MIDI-GEN</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="bg">
+    <div class="grid"></div>
+    <div class="vignette"></div>
+    <div class="scan"></div>
+  </div>
 
-*{ box-sizing:border-box; }
-html,body{
-  margin:0; padding:0;
-  background: var(--bg);
-  color: var(--text);
-  font-family: ui-monospace, Menlo, Monaco, Consolas, "Courier New", monospace;
-}
+  <header class="topbar">
+    <div class="brand">
+      <div class="orb" aria-hidden="true"><span class="orbNote">♪</span></div>
+      <div class="brandText">
+        <div class="title">DIGI MIDI-GEN</div>
+        <div class="sub">AI PLANNER • STRUCTURE + GROOVE DISCIPLINE • MIDI EXPORT</div>
+      </div>
+    </div>
 
-.bg{
-  position:fixed; inset:0; z-index:-1;
-  background: radial-gradient(1200px 700px at 30% 10%, rgba(20,150,80,0.12), transparent 55%),
-              radial-gradient(900px 600px at 80% 40%, rgba(80,255,160,0.08), transparent 60%),
-              linear-gradient(180deg, rgba(0,0,0,0.35), rgba(0,0,0,0.75));
-}
-.bg .grid{
-  position:absolute; inset:0;
-  background-image:
-    linear-gradient(to right, rgba(120,255,180,0.06) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(120,255,180,0.06) 1px, transparent 1px);
-  background-size: 48px 48px;
-  opacity:0.55;
-}
-.bg .vignette{
-  position:absolute; inset:-10%;
-  background: radial-gradient(circle at center, transparent 40%, rgba(0,0,0,0.55) 75%);
-  pointer-events:none;
-}
-.bg .scan{
-  position:absolute; inset:0;
-  background: repeating-linear-gradient(
-    to bottom,
-    rgba(255,255,255,0.03),
-    rgba(255,255,255,0.03) 1px,
-    transparent 2px,
-    transparent 6px
-  );
-  opacity:0.25;
-  mix-blend-mode: overlay;
-  pointer-events:none;
-}
+    <div class="seedBox">
+      <div class="seedLabel">SEED</div>
+      <div class="seedRow">
+        <div id="seedValue" class="seedValue">—</div>
+        <button id="copySeed" class="btn mini">COPY</button>
+      </div>
+      <div id="aiLabel" class="modeLabel">AI: —</div>
+    </div>
+  </header>
 
-.topbar{
-  display:flex;
-  align-items:flex-start;
-  justify-content:space-between;
-  gap:12px;
-  padding:14px 14px 8px;
-}
+  <!-- HUD overlays (hidden via Hide) -->
+  <main id="hud" class="hud">
+    <section class="panel wide">
+      <div class="panelHeader">
+        <div class="panelTitle">ARTISTS</div>
+        <div class="panelHint">FIRST SELECTED = MAIN • MULTI = MIX</div>
+      </div>
+      <div id="artistToggles" class="chips"></div>
+    </section>
 
-.brand{ display:flex; gap:12px; align-items:center; }
-.orb{
-  width:42px; height:42px; border-radius:999px;
-  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.25), rgba(20,150,80,0.18) 35%, rgba(0,0,0,0.65));
-  border: 1px solid rgba(140,255,190,0.28);
-  box-shadow: 0 10px 30px var(--shadow);
-  display:flex; align-items:center; justify-content:center;
-}
-.orbNote{
-  font-size:18px;
-  color: rgba(190,255,220,0.95);
-  text-shadow: 0 0 16px rgba(120,255,180,0.45);
-}
-.title{ font-size:16px; letter-spacing: 0.12em; }
-.sub{
-  margin-top:4px;
-  font-size:11px;
-  color: var(--muted);
-  letter-spacing: 0.08em;
-}
+    <section class="panel wide">
+      <div class="panelHeader">
+        <div class="panelTitle">MOOD / VIBE</div>
+        <div class="panelHint">PICK 1 • AI MODIFIES INTENSITY</div>
+      </div>
+      <div id="moodRow" class="seg moodSeg"></div>
+      <div class="settingHelp">Mood changes density, stop policy, and variation — artist groove stays locked.</div>
+    </section>
 
-.seedBox{
-  min-width: 160px;
-  padding:10px 10px 8px;
-  border-radius:16px;
-  background: var(--glass);
-  border: 1px solid var(--line2);
-  box-shadow: 0 14px 34px var(--shadow);
-}
-.seedLabel{ font-size:11px; color: var(--muted); letter-spacing: 0.12em; }
-.seedRow{
-  display:flex; align-items:center; justify-content:space-between;
-  gap:10px; margin-top:6px;
-}
-.seedValue{
-  font-size:14px; letter-spacing: 0.08em; color: var(--green);
-}
-.modeLabel{
-  margin-top:6px;
-  font-size:11px;
-  color: var(--muted);
-  letter-spacing:0.10em;
-}
+    <section class="panel">
+      <div class="panelHeader">
+        <div class="panelTitle">ACTIONS</div>
+        <div class="panelHint">AI PLANS • GROOVE EXECUTES</div>
+      </div>
+      <div class="btnRow">
+        <button id="generateBtn" class="btn big">GENERATE</button>
+      </div>
+      <div class="btnRow">
+        <button id="settingsBtn" class="btn">SETTINGS</button>
+      </div>
+    </section>
 
-.hud{
-  padding: 0 14px;
-  display:grid;
-  grid-template-columns: 1fr;
-  gap:12px;
-}
-.hud.hidden{ display:none; }
+    <section id="settingsPanel" class="panel wide hidden">
+      <div class="panelHeader">
+        <div class="panelTitle">SETTINGS</div>
+        <div class="panelHint">STRUCTURE + LENGTH</div>
+      </div>
 
-.panel{
-  border-radius:18px;
-  background: var(--glass);
-  border: 1px solid var(--line2);
-  box-shadow: 0 16px 36px var(--shadow);
-  padding: 12px;
-}
-.panel.wide{ width:100%; }
+      <div class="settingsGrid">
+        <div class="setting wide">
+          <div class="settingLabel">LENGTH</div>
+          <div class="seg">
+            <button class="segBtn" data-setting="bars" data-value="4">4 BARS</button>
+            <button class="segBtn" data-setting="bars" data-value="8">8 BARS</button>
+            <button class="segBtn" data-setting="bars" data-value="16">16 BARS</button>
+          </div>
+          <div class="settingHelp">Longer length enables more “song sketch” structure.</div>
+        </div>
 
-.panelHeader{
-  display:flex;
-  justify-content:space-between;
-  align-items:baseline;
-  gap:10px;
-  padding-bottom:10px;
-  border-bottom:1px solid rgba(120,255,180,0.08);
-}
-.panelTitle{
-  font-size:12px;
-  letter-spacing:0.14em;
-  color: rgba(210,255,230,0.92);
-}
-.panelHint{
-  font-size:10px;
-  letter-spacing:0.12em;
-  color: var(--muted);
-}
+        <div class="setting wide">
+          <div class="settingLabel">SKETCH</div>
+          <div class="seg">
+            <button class="segBtn" data-setting="sketch" data-value="loop">LOOP</button>
+            <button class="segBtn" data-setting="sketch" data-value="teaseDrop">TEASE→DROP</button>
+            <button class="segBtn" data-setting="sketch" data-value="aaba">AABA</button>
+            <button class="segBtn" data-setting="sketch" data-value="buildDrop">BUILD→DROP</button>
+          </div>
+          <div class="settingHelp">Sketch controls section map (intro/drop/break/return). AI still applies artist discipline.</div>
+        </div>
 
-.chips{ margin-top:10px; display:flex; flex-wrap:wrap; gap:8px; }
-.chip{
-  border:1px solid rgba(120,255,180,0.18);
-  background: rgba(0,0,0,0.22);
-  color: rgba(210,255,230,0.88);
-  border-radius:999px;
-  padding: 8px 10px;
-  font-size:11px;
-  letter-spacing:0.10em;
-  cursor:pointer;
-}
-.chip.on{
-  background: rgba(20,150,80,0.22);
-  border-color: rgba(140,255,190,0.35);
-  color: rgba(230,255,245,0.95);
-  box-shadow: 0 0 0 2px rgba(140,255,190,0.08) inset;
-}
+        <div class="setting wide">
+          <div class="settingLabel">VIEW</div>
+          <div class="seg">
+            <button class="segBtn" data-setting="viewMode" data-value="track">TRACK</button>
+            <button class="segBtn" data-setting="viewMode" data-value="ring">RING</button>
+          </div>
+          <div class="settingHelp">TRACK shows clip lanes + note blocks. RING is audio spectrum.</div>
+        </div>
 
-.btnRow{ margin-top:10px; display:flex; gap:10px; flex-wrap:wrap; }
-.btn{
-  border-radius:16px;
-  padding: 10px 12px;
-  border:1px solid rgba(120,255,180,0.18);
-  background: rgba(0,0,0,0.22);
-  color: rgba(230,255,245,0.92);
-  font-size:12px;
-  letter-spacing:0.12em;
-  cursor:pointer;
-  box-shadow: 0 12px 26px rgba(0,0,0,0.35);
-}
-.btn.big{
-  padding: 12px 14px;
-  font-size:12px;
-  letter-spacing:0.14em;
-  background: rgba(20,150,80,0.24);
-  border-color: rgba(140,255,190,0.32);
-}
-.btn.mini{ padding: 7px 9px; font-size:11px; letter-spacing:0.12em; }
-.btn.ghost{
-  background: rgba(0,0,0,0.10);
-  border-color: rgba(120,255,180,0.14);
-  color: rgba(210,255,230,0.75);
-}
+        <div class="setting">
+          <div class="settingLabel">KEY MODE</div>
+          <div class="seg">
+            <button class="segBtn" data-setting="keyMode" data-value="auto">AUTO</button>
+            <button class="segBtn" data-setting="keyMode" data-value="pick">PICK</button>
+          </div>
+        </div>
 
-.hidden{ display:none !important; }
+        <div class="setting wide">
+          <div class="settingLabel">SCALE BIAS</div>
+          <div class="seg">
+            <button class="segBtn" data-setting="scaleMode" data-value="auto">AUTO</button>
+            <button class="segBtn" data-setting="scaleMode" data-value="natural">NATURAL</button>
+            <button class="segBtn" data-setting="scaleMode" data-value="harmonic">HARMONIC</button>
+            <button class="segBtn" data-setting="scaleMode" data-value="phrygian">PHRYGIAN</button>
+          </div>
+        </div>
 
-.settingsGrid{
-  margin-top:10px;
-  display:grid;
-  grid-template-columns: 1fr;
-  gap:12px;
-}
-.setting{
-  border-radius:16px;
-  border: 1px solid rgba(120,255,180,0.10);
-  background: rgba(0,0,0,0.14);
-  padding:10px;
-}
-.setting.wide{ grid-column: 1 / -1; }
-.settingLabel{
-  font-size:11px;
-  letter-spacing:0.14em;
-  color: rgba(210,255,230,0.88);
-}
-.settingHelp{
-  margin-top:6px;
-  font-size:10px;
-  letter-spacing:0.10em;
-  color: var(--muted);
-  line-height:1.35;
-}
+        <div class="setting wide">
+          <div class="settingLabel">BPM MODE</div>
+          <div class="seg">
+            <button class="segBtn" data-setting="bpmMode" data-value="artist">AI (ARTIST)</button>
+            <button class="segBtn" data-setting="bpmMode" data-value="fixed">FIXED</button>
+            <button class="segBtn" data-setting="bpmMode" data-value="manual">MANUAL</button>
+          </div>
 
-.seg{
-  margin-top:8px;
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-}
-.moodSeg .segBtn{ padding: 9px 10px; }
+          <div class="bpmRow">
+            <label class="inputLabel">Fixed</label>
+            <input id="bpmFixed" class="input" type="number" min="60" max="220" value="170" />
+            <label class="inputLabel">Manual</label>
+            <input id="bpmManual" class="input" type="number" min="60" max="220" value="170" />
+          </div>
+        </div>
 
-.segBtn{
-  border-radius:999px;
-  padding: 7px 10px;
-  border:1px solid rgba(120,255,180,0.16);
-  background: rgba(0,0,0,0.18);
-  color: rgba(210,255,230,0.80);
-  font-size:11px;
-  letter-spacing:0.10em;
-  cursor:pointer;
-}
-.segBtn.on{
-  background: rgba(20,150,80,0.22);
-  border-color: rgba(140,255,190,0.32);
-  color: rgba(230,255,245,0.95);
-}
+        <div class="setting wide">
+          <div class="settingLabel">PICK KEY</div>
+          <div id="keyButtons" class="keys"></div>
+          <div class="settingHelp">Used only when KEY MODE = PICK</div>
+        </div>
+      </div>
+    </section>
+  </main>
 
-.bpmRow{
-  margin-top:8px;
-  display:flex;
-  gap:8px;
-  align-items:center;
-  flex-wrap:wrap;
-}
-.inputLabel{ font-size:10px; color: var(--muted); letter-spacing:0.10em; }
-.input{
-  width:92px;
-  border-radius:12px;
-  padding:8px 10px;
-  border:1px solid rgba(120,255,180,0.12);
-  background: rgba(0,0,0,0.22);
-  color: rgba(230,255,245,0.92);
-  font-family: inherit;
-}
+  <!-- VISUAL AREA (ALWAYS VISIBLE EVEN WHEN HIDDEN) -->
+  <section class="vizWrap">
+    <div class="vizHeader">
+      <div class="vizTitle">VISUAL</div>
+      <div id="vizHint" class="vizHint">TRACK VIEW (DEFAULT)</div>
+    </div>
+    <canvas id="viz" class="vizCanvas" width="1200" height="520"></canvas>
+  </section>
 
-.keys{ margin-top:8px; display:flex; flex-wrap:wrap; gap:8px; }
-.keyBtn{
-  border-radius:999px;
-  padding: 7px 10px;
-  border:1px solid rgba(120,255,180,0.16);
-  background: rgba(0,0,0,0.18);
-  color: rgba(210,255,230,0.80);
-  font-size:11px;
-  letter-spacing:0.12em;
-  cursor:pointer;
-}
-.keyBtn.on{
-  background: rgba(20,150,80,0.22);
-  border-color: rgba(140,255,190,0.32);
-  color: rgba(230,255,245,0.95);
-}
+  <!-- ALWAYS-VISIBLE FOOTER BAR -->
+  <footer class="footer">
+    <div class="footerBar">
+      <button id="downloadBtn" class="btn big">DOWNLOAD</button>
 
-/* VISUAL */
-.vizWrap{
-  margin: 12px 14px 0;
-  border-radius: 18px;
-  background: rgba(0,0,0,0.22);
-  border: 1px solid rgba(120,255,180,0.16);
-  box-shadow: 0 18px 38px var(--shadow);
-  overflow:hidden;
-}
-.vizHeader{
-  display:flex;
-  justify-content:space-between;
-  gap:12px;
-  padding: 10px 12px;
-  border-bottom:1px solid rgba(120,255,180,0.10);
-  background: rgba(10,60,30,0.14);
-}
-.vizTitle{ font-size:11px; letter-spacing:0.14em; color: rgba(210,255,230,0.88); }
-.vizHint{ font-size:10px; letter-spacing:0.10em; color: var(--muted); }
-.vizCanvas{
-  width:100%;
-  height:auto;
-  display:block;
-  background: radial-gradient(900px 360px at 50% 40%, rgba(20,150,80,0.10), transparent 65%),
-              rgba(0,0,0,0.35);
-}
+      <div class="transport">
+        <button id="playBtn" class="btn">PLAY</button>
+        <button id="stopBtn" class="btn ghost">STOP</button>
+        <button id="hideBtn" class="btn ghost">HIDE</button>
+      </div>
 
-/* FOOTER */
-.footer{ padding: 12px 14px 0; }
-.footerBar{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  flex-wrap:wrap;
-  padding: 10px 12px;
-  border-radius: 18px;
-  background: var(--glass2);
-  border: 1px solid rgba(120,255,180,0.16);
-  box-shadow: 0 18px 38px var(--shadow);
-}
-.transport{ display:flex; gap:10px; align-items:center; }
-.feedback{ display:flex; gap:8px; align-items:center; }
-.nowInfo{ display:flex; gap:8px; flex-wrap:wrap; }
+      <div class="feedback">
+        <button id="likeBtn" class="btn mini">👍</button>
+        <button id="dislikeBtn" class="btn mini ghost">👎</button>
+      </div>
 
-.tag{
-  font-size:10px;
-  letter-spacing:0.12em;
-  color: rgba(210,255,230,0.80);
-  padding: 7px 9px;
-  border-radius: 999px;
-  background: rgba(0,0,0,0.22);
-  border: 1px solid rgba(120,255,180,0.10);
-}
+      <div class="nowInfo">
+        <div id="bpmNow" class="tag">BPM: —</div>
+        <div id="keyNow" class="tag">KEY: —</div>
+        <div id="lenNow" class="tag">LEN: —</div>
+        <div id="artistsNow" class="tag">ARTISTS: —</div>
+        <div id="moodNow" class="tag">MOOD: —</div>
+      </div>
+    </div>
 
-.trackPanel{ margin-top:12px; }
-.trackList{
-  margin-top:10px;
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-}
-.trackItem{
-  display:flex;
-  justify-content:space-between;
-  gap:12px;
-  padding: 8px 10px;
-  border-radius: 14px;
-  background: rgba(0,0,0,0.18);
-  border:1px solid rgba(120,255,180,0.10);
-}
-.trackName{
-  font-size:11px;
-  letter-spacing:0.12em;
-  color: rgba(230,255,245,0.92);
-}
-.trackMeta{
-  font-size:10px;
-  letter-spacing:0.10em;
-  color: var(--muted);
-  text-align:right;
-}
+    <!-- TRACKLIST (HIDDEN IN HIDE MODE) -->
+    <section id="trackPanel" class="panel wide trackPanel">
+      <div class="panelHeader">
+        <div class="panelTitle">TRACKLIST</div>
+        <div id="planLabel" class="panelHint">PLAN: —</div>
+      </div>
+      <div id="trackList" class="trackList"></div>
+    </section>
 
-.safePad{ height: max(18px, env(safe-area-inset-bottom)); }
+    <div class="safePad"></div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
